@@ -1,0 +1,16 @@
+//console.log("x is" + x);
+//x = goGetIt.indexOf(Intershield300v);
+//mindry = goGetIt[x+1];
+//maxdry = goGetIt[x+2];
+//minMaxDry = mindry + ", " + maxdry;
+//console.log("mindry:" + mindry)
+//console.log("maxdry:" + maxdry)
+
+//function below combines the result of closest function
+//into the naming convention of the curing schedule hashes
+//it calls out the correct curing schedule by name.
+var whichCureSchedule = function whichCureSchedule () {
+var tada
+tada = "h" + closest();
+goGetIt = "Intershield300v.h." + tada
+};

@@ -1,0 +1,6 @@
+RSpec.describe MyHash do
+it "sets and retrievs a value at a key" do
+    some_hash = MyHash.new
+    some-hash[:foo] = 3
+    expect (some_hash[:foo]).to eq(3)
+    
