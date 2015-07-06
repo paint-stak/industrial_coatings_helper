@@ -1,154 +1,133 @@
-//variables p1, p2 and p3 represent the empty buckets
-//whatever products will be used on the first, second 
-//and third coats of a paint job.
-
-var Intershield300V = {
-objectName: "Intershield300V",
-name: "i300v",
-Manufacturer: "International Paint",
-chemistry: "epoxy",
-type: "anticorrosive-primer",
-ratio: "1-1",
-volumeSolids: 0.63,
-curingSchedules: [23, 41, 77, 95],
-w: "almost there",
-h:{
-    t22: "really, really close",
-
-    t23: {
-           touchDry: "6hrs", 
-           hardDry: "28 hrs",
-           potLife: "6hrs", 
-           i979: ["30 hrs", "5 dys"],
-           i267: ["30 hrs", "14 dys"],
-           i740: ["30 hrs", "7 dys"],
-           i300vImmersed: ["30 hrs", "14 dys"],
-           i300v: ["30 hrs", "6 mths"],
-           i990hs: ["30 hrs", "3 dys"],
-           i640: ["6 hrs", "NA"]
-    },
-
-    t41: {
-            touchDry: "4hrs", 
-            hardDry: "17hrs", 
-            potLife: "6hrs", 
-            i979: ["18hrs", "5dys"], 
-            i267: ["18hrs", "14dys"], 
-            i740: ["18hrs", "7dys"], 
-            i300v: ["18 hrs", "6mnths"], 
-            i300vImmersed: ["18hrs", "14 dys"], 
-            i990hs: ["18hrs", "3dys"],
-            i640: ["6 hrs", "NA"]
-    },
-
-    t77: {
-            touchDry: "3hrs", 
-            hardDry: "4hrs", 
-            potLife: "2hrs",  
-            i979: ["6.5hrs", "3dys"], 
-            i267: ["6.5hrs", "14dys"], 
-            i740: ["6.5hrs", "7dys"], 
-            i300vImmersed: ["6.5hrs", "14dys"], 
-            i300v: [ "6.5 hrs", "5.5mnths"], 
-            i990hs: ["6.5hrs", "3dys"],
-            i640: ["2 hrs", "NA"]
-    },
-   
-
-    t95:  {
-             touchDry: "60 mins", 
-             hardDry: "2 hrs", 
-             potLife: "60 mins", 
-             i979: ["4 hrs", "3 dys"], 
-             i267: ["4 hrs", "14 dys"], 
-             i740: ["4 hrs", "7 dys"], 
-             i300vImmersed: ["4 hrs", "14 dys"], 
-             i300v: ["4 hrs", "3 mnths"], 
-             i990hs: ["4 hrs", "3 dys"],
-             i640: ["60 mins", "NA"]
-    }//cloze 95 degrees
-} //cloze h
-}; //cloze 300v objekt
-
-var bestTemp = 199;
-var bestDiff = 199;
+var manufacturer;
+var bestTemp;
+var bestDiff;
 var difference;
-var minMaxDry;
 var x;
 var dryTimes;
 var goodTemps;
 var dtA;
 var dtB;
-
+var minTemp;
+var maxTemp;
+var dryRay;
+var tempToTry;
 var goGetIt;
-var min_dft = 5.0; //later this will be provided by the user
-var temp = 80; //later this will be provided by the user
+var temp;
+var customerProduct = [];
+var customerThickness = [];
+var kay;
+var currentProduct;
+var nextProduct;
+var maxDFT;
+var minDFT;
+var minWFT;
+var maxWFT;
+var getDFT;
+var WFTstring;
+var finalTemp;
 
 
+console.log("specifier script is loaded");
 
-var p1 = Intershield300V;
-var p2 = Intershield300V
-//var p3 = Interthane990hs;
+function buttonhandler () {
+//Purpose: to create the right number of pull-down menus in the form.
+//manufacturer = document.getElementById('mfg').value;
+var bullet;
+x = document.getElementById("c").value;
+for (i = 0; i < x; i++) {
+     bullet = "b" + i;
+     console.log("value of bullet is: " + bullet);
+  document.getElementById(bullet).innerHTML = "<select><option value='Choose'>Choose coating</option><option value='Intershield300V'>Intershield 300V</option><option value='Interthane990HS'>Interthane 990HS</option><option value='Intertuf262'>Intertuf 262</option><option value='Interspeed640'>Interspeed 640</option><option value='Interspeed6400NA'>Interspeed 6400NA</option><option value='Interbond998'>Interbond 998</option><option value='Interzinc22HS'>Interzinc 22HS</option><option value='Interzinc75V'>Interzinc75V</option><option value='Interseal670HS'>Interseal 670HS</option<option value='Intergard264'>Intergard 264</option><option value='Intershield803'>Intershield 803</option><option value='Intershield300V'>Intershield 300V</option><option value='Intershield300VImmersed'>Intershield 300V Immersed</option></select>   Mils:  <input type='number' name='mils' min='1' max='100'> "; 
+  };
+};
 
-var getDFT = function getDFT () {
-var max_dft =  min_dft + 1;
-var min_wft = min_dft/(Intershield300V.volumeSolids);
-var max_wft = max_dft/(Intershield300V.volumeSolids);
-WFTstring = max_dft + ", " + min_wft + ", " + max_wft;
+function menuHandler() {
+  //purpose: Receive input from pull-down menus and save as a coating spec, in the form of two arrays, one for products and one for thicknesses. 
+console.log("menu-handler is activated");
+var x = document.getElementById("c").value;
+temp = document.getElementById("tmp").value;
+   for (i=0; i<x; i+=1)   {
+      console.log("menuhandler counter: " + i);
+      customerProduct[i] = eval("b"+i ).firstElementChild.value;
+      customerThickness[i] = eval("b"+i ).lastElementChild.value;
+    }
+reportBack(); //calls the report-back function so the paint spec array can be used. 
+} ;
+
+getDFT = function (theCoating, kay) {
+//Purpose: Calculate wet-film thickness, using the thicknesses in the array (created by menuHandler) and product data retreived from the paint data script.
+//Returns in the form of a string that will be inserted in the DOM.
+minDFT = eval(customerThickness[kay]);
+maxDFT = 1.0 + minDFT;
+minWFT = minDFT/(theCoating.volumeSolids);
+maxWFT= maxDFT/theCoating.volumeSolids;
+WFTstring =  "" + Math.round(minWFT) + "</td><td>" + Math.round(maxWFT) + "</td><td>" + minDFT + "</td><td>" + maxDFT ;
 return WFTstring;
 };
-//This function below will decide which column of curing schedule
-//is best, by picking the one whose name (a temperature) is 
-//closest to the current temperature. It uses the curing-schedules
-//array, which is a property of each paint-product object.
-var closest = function closest () {
-    var i;
+
+var closest = function closest (coating) {
+//Purpose: Go to the coating schedules array in the product's JSON object and decide which of the available temperatures is closest to the current temperature.
+//Returns that temperature to be used by other functions that retrieve drying times. 
+    var j;
     //console.log("closest function is activated")
-for (i=0; i<Intershield300V.curingSchedules.length; i++) {
-var tempToTry = Intershield300V.curingSchedules[i];
+for (j=0; j<coating.curingSchedules.length; j++) {
+tempToTry = coating.curingSchedules[j];
 difference = Math.abs(tempToTry-temp);
 if (difference < bestDiff) {
     bestTemp = tempToTry;
      bestDiff = difference;
-     //console.log("new best temp is " + bestTemp);
+   }
 }
-//else console.log("The best temp is still " + bestTemp);
-}
-return bestTemp;
+return bestTemp; 
 };
 
-var tempRange = function tempRange () {
-var minTemp = Intershield300V.curingSchedules[0];
-var maxTemp = Intershield300V.curingSchedules[Intershield300V.curingSchedules.length-1];
-goodTemps = minTemp + ", " + maxTemp;
+var tempRange = function tempRange (coat) {
+  //Purpose: Grab first and last entries from the coatins schedule array of the product's JSON object, to report the temperature range at which the product can be applied. 
+// Returns two values--the minimum and the maximum--formatted as a string to be inserted in the DOM.
+var minTemp = coat.curingSchedules[0];
+var maxTemp = coat.curingSchedules[coat.curingSchedules.length-1];
+goodTemps = "" +minTemp + "</td><td>" + maxTemp;
 return goodTemps;
 };
 
 
-var getSchedule = function getSchedule () {
-//console.log("getSchedule function is activated")
-dtA = p1.objectName;
-dtB = p2.name; 
-var finalTemp = closest();
+var getSchedule = function getSchedule (coat, nextcoat) {
+//Retreives the proper drying times for the present coat of paint, based on the present temperature and the product used for the following coat. 
+//Assembles the address for that stored data, based on input variables; retreives the data;
+//Returns the answer as a text string for insertion in the DOM.
+dtA=coat.objectName;
+dtB=nextcoat.name; 
+finalTemp = closest(coat);
+
 dryTimesAddress = dtA + ".h.t" + finalTemp + "." + dtB;
-dryTimes = eval(dryTimesAddress);
+dryStrung = eval(dryTimesAddress);
+dryRay = dryStrung.split(',');
+
+dryTimes = dryRay[0] + "</td><td>" + dryRay[1];
+return dryTimes; 
+
 };
 
+function reportBack () {
+//Purpose: Assembles the full string of data, one coat of paint at a time, calling some of the functions above for sub-assemblies of the main string. 
+//Returns info that appears in the table after the "calculate" button is pushed. 
+x = document.getElementById("c").value;
+var info;
+var output; 
+    for (k=0; k<x+1; k++) {
+     kay=k;
+     output = "d"+k;
+     console.log("output= " + output);
+   currentProduct = eval(customerProduct[kay]);
+   nextProduct = eval(customerProduct[kay + 1]);
+   
 
-getSchedule();
-tempRange();
-
-
-console.log(Intershield300V.name);
-console.log("your mils dry/wet: " + min_dft + ", " + getDFT());
-console.log("Your temp is: " + temp);
-console.log("Your working temp range is: " + goodTemps);
-
-
-console.log("Your dry times address is: " + dryTimesAddress);
-console.log("your actual dry times are: " + dryTimes);
-/* the p1 to p3 variables don't work because they are
-are above the objects. The arrays may have to be replaced
-with objects--because it will take less time to indicate
-the dry times within an object, rather than search
-through an array*/
+   if (k<x-1) {console.log("getschedule "+kay)}
+  else if (k=x-1) {
+   nextProduct = eval(customerProduct[kay]);
+    console.log('get schedule last coat');
+  }
+ info = "<tr><td>spot/full</td><td>" + (kay+1) + "</td><td>"+ currentProduct.ACAF +"</td><td>" +getDFT(currentProduct, kay)+"</td><td>"+currentProduct.manufacturer+"</td><td>"+currentProduct.objectName+"</td><td>"+ currentProduct.ratio + "</td><td>color</td><td>"+currentProduct.induction+"</td><td>"+tempRange(currentProduct) +"</td><td>"+getSchedule(currentProduct, nextProduct)+"</td></tr>";
+document.getElementById(output).innerHTML = info;
+}
+};

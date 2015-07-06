@@ -1,0 +1,54 @@
+* {
+	margin: 10px 10px 10px 10px;
+}
+
+
+
+button {
+background: silver;
+
+}
+
+
+     b0, b1, b2 , b3, b4, b5, b6, b7 {
+         display: none;
+
+
+     }
+     li {
+
+           margin: 10px 10px 10px 10px;
+     }
+     ul {
+          list-style-type: none;
+
+     }
+
+
+#product1 {
+
+ background: none; 
+}
+
+d0, d1, d2, d3, d4, d5, d6, d7 {
+height: 10px;
+
+}
+td, table {
+border: 1px solid black;
+padding: 15px;
+
+}
+td {
+
+  height: 2em;
+}
+table {
+width: 100%;
+
+}
+#output {
+margin: 0 auto;
+background-color: silver;
+
+}
