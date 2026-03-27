@@ -1,5 +1,24 @@
 * {
-	margin: 10px 10px 10px 10px;
+	margin: 10px auto;
+}
+
+div {
+ margin: 0 auto; 
+ background: white;
+ color: black;
+ border: 1px solid silver;
+ padding: 10px 50px 100px 50px;
+
+     
+}
+
+.userError {
+  color: white;
+    background: #ffa500;
+   
+
+        
+    
 }
 
 
@@ -35,20 +54,118 @@ height: 10px;
 
 }
 td, table {
-border: 1px solid black;
-padding: 15px;
+
+padding: 2px;
+    background: white;
+    
 
 }
 td {
 
-  height: 2em;
+  height: 1em;
+ vertical-align: text-top;
+    border: 1px solid silver;
 }
 table {
-width: 100%;
+font-size: 0.75rem;
+    border: none;
+    
 
 }
 #output {
 margin: 0 auto;
-background-color: silver;
+width: 100%;
+    
+    
 
+}
+#topBox {
+ display: block;  
+    margin: 50px auto;
+    width: 66%;
+}
+#middleBox {
+    display: none;
+    margin: 50px auto;
+    width: 66%;
+}
+#bottomBox {
+   display: none;
+    margin: 50px auto;
+width: 900px;
+}
+h1 {
+ text-align: center;
+    background: #00005C;
+    color: white; 
+   
+}
+.calculateButton {
+    color: grey;
+    
+}
+.reloadButton {
+    color: grey;
+}
+.calculateButton:hover, .calculateButton:focus {
+ color:green;   
+}
+.reloadButton:hover, .reloadButton:focus {
+ color:red;   
+}
+
+.mainGraph {
+  text-align: center;
+  margin: 0 auto;
+    background:none ;
+    color: #00005C; 
+    font-size: 1rem;
+  
+}
+footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+}
+footer h3 {
+    text-align: center;
+    color: grey;
+}
+
+.footer {
+    min-height: 250vh;
+    flex-direction: column;
+    margin-top: auto;
+    display: flex;
+    background: #00005C;
+    color: white;
+
+
+}
+
+footer p,
+footer ul,
+footer ul li {
+    text-align: left;
+
+
+}
+hr {
+color: silver;
+    margin: 0 auto; 
+}
+h1 {
+ margin: 0 auto; 
+    text-align: center;
+}
+#maingGraph {
+margin: 0 auto; 
+    text-align: center; 
+    
+}
+th {
+ font-family: sans-serif;
+    color: silver;
+    text-align: left;
 }

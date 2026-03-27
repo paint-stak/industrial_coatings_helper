@@ -40,6 +40,32 @@ info: "",
 output: "",
 };
 
+// Lookup dictionary: maps product name strings (from dropdown values) to the product objects defined in InternationalPaintData.js
+paint.products = {
+    Intershield300V: window.Intershield300V,
+    Intershield300VImmersed: window.Intershield300VImmersed,
+    Interthane990HS: window.Interthane990HS,
+    Intertuf262: window.Intertuf262,
+    Interspeed640: window.Interspeed640,
+    Interspeed6400NA: window.Interspeed6400NA,
+    Interbond998: window.Interbond998,
+    Interzinc22HS: window.Interzinc22HS,
+    Interzinc75V: window.Interzinc75V,
+    Interseal670HS: window.Interseal670HS,
+    Intergard264: window.Intergard264,
+    Intershield803: window.Intershield803,
+    Intergard5377: window.Intergard5377,
+    Intergard631: window.Intergard631,
+    Interspeed5640: window.Interspeed5640,
+    Amerlock2VOC: window.Amerlock2VOC,
+    PSX700: window.PSX700,
+    PSX1001: window.PSX1001,
+    Dimetcote302H: window.Dimetcote302H,
+    Amercoat240: window.Amercoat240,
+    ABC3: window.ABC3,
+    Carbocoat150UP: window.Carbocoat150UP
+};
+
 console.log("specifier script is loaded");
 
 function buttonhandler () {
@@ -68,8 +94,8 @@ paint.x = document.getElementById("c").value;
 paint.temp = document.getElementById("tmp").value;
    for (i=0; i<paint.x; i+=1)   {
       console.log("menuhandler counter: " + i);
-      paint.customerProduct[i] = eval("b"+i ).firstElementChild.value;
-      paint.customerThickness[i] = eval("b"+i ).lastElementChild.value;
+      paint.customerProduct[i] = document.getElementById("b"+i ).firstElementChild.value;
+      paint.customerThickness[i] = document.getElementById("b"+i ).lastElementChild.value;
     }
 reportBack(); //calls the report-back function so the paint spec array can be used. 
 } 
@@ -78,7 +104,7 @@ paint.getDFT = function (theCoating, kay) {
 //Purpose: Calculate wet-film thickness, using the thicknesses in the array (created by menuHandler) and product data retreived from the paint data script
 //Returns in the form of a string that will be inserted in the DOM.
     console.log("get dft function is activated")
-paint.minDFT = eval(paint.customerThickness[paint.kay]);
+paint.minDFT = parseFloat(paint.customerThickness[paint.kay]);
 paint.maxDFT = 1.0 + paint.minDFT;
 paint.minWFT = paint.minDFT/(theCoating.volumeSolids);
 paint.maxWFT= paint.maxDFT/theCoating.volumeSolids;
@@ -124,8 +150,7 @@ paint.dtA=coat.objectName;
 paint.dtB=nextcoat.name; 
 paint.finalTemp = paint.closest(coat);
 
-paint.dryTimesAddress = paint.dtA + ".h.t" + paint.finalTemp + "." + paint.dtB;
-paint.dryStrung = eval(paint.dryTimesAddress);
+paint.dryStrung = coat.h["t" + paint.finalTemp][paint.dtB];
     console.log("drystrung is equal to: " + paint.dryStrung); 
     
 paint.dryRay = paint.dryStrung.split(',');
@@ -144,13 +169,13 @@ paint.x = document.getElementById("c").value;
      paint.kay=k;
      paint.output = "d"+k;
     // console.log("output= " + paint.output);
-   paint.currentProduct = eval(paint.customerProduct[paint.kay]);
-   paint.nextProduct = eval(paint.customerProduct[paint.kay + 1]);
+   paint.currentProduct = paint.products[paint.customerProduct[paint.kay]];
+   paint.nextProduct = paint.products[paint.customerProduct[paint.kay + 1]];
    
 
    if (k<paint.x-1) {console.log("getschedule "+paint.kay);}
   else if (k==paint.x-1) {
-   paint.nextProduct = eval(paint.customerProduct[paint.kay]);
+   paint.nextProduct = paint.products[paint.customerProduct[paint.kay]];
     console.log('get schedule last coat');
 //This function allows the final coat to execute, without needing info for the "next coat"
   }
@@ -179,9 +204,7 @@ if (paint.canCoat === false) {console.log("valid coat variable was undefined");
 
    paint.validCoat = function (){
      
-     paint.coatCheck = paint.currentProduct.objectName + ".h.t" + paint.closest(paint.currentProduct) + "." + paint.nextProduct.name;
-        console.log("valid coat address value: " + paint.coatCheck);
-       paint.checkValid =  eval(paint.coatCheck);
+     paint.checkValid = paint.currentProduct.h["t" + paint.closest(paint.currentProduct)][paint.nextProduct.name];
   //      console.log("checkvalid value equals: " + paint.checkValid);
         if (paint.checkValid) {
          paint.canCoat = true;   
