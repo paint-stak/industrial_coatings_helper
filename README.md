@@ -7,7 +7,7 @@ The project has two aspects:
 
 ## The web app
 
-The [coatings calculator](git@github.com:paint-stak/industrial_coatings_helper.git) is a simple, one-page web app for industrial painters, coatings inspectors, coatings tech reps and project managers. 
+The [coatings calculator](https://paint-stak.github.io/industrial_coatings_helper/) is a simple, one-page web app for industrial painters, coatings inspectors, coatings tech reps and project managers. 
 
 You can input the data that your stakeholders give you:  
 
