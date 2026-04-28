@@ -27,11 +27,13 @@ You receive a detailed specification that includes:
 Start on the front page of the application.
 
 1.) Enter the number of coats. Then press "go."
+
 2.) Complete the form on this page, including: 
 * Average expected temperature (in Farenheit degrees).
 Each of the remaining rows represents one coat of paint.
 * On each row, choose the product for that coat.
 * On each row, whose minimum dry film thickness for that coat.
+  
 3.) When the form is complete, press **Calculate**.
    RESULT: You'll see a table with data on all your coats of paint, which you can copy past into excel or MS Word.
 
